@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;1,300;1,700&display=swap");
+
+body {
+  font-family: "Lato", sans-serif;
+}
+.sidebar{
+  position: sticky;
+  top:1px;
+  background: #121B28;
+  height: 100%;
+  overflow: none;
+}
+.sidebar .mb-1.shadow-sm{
+  background: #121B28;
+  color:#ffffff;
+
+}
+.sidebar .mb-1.shadow-sm.list-group-item {
+  border: none;
+
+}
+.sidebar .mb-1.shadow-sm.list-group-item.active {
+  background: #5fe3b3;
+  color:#121B28;
+  border-radius: 12px;
+
+}
+.orderlist{
+  position: sticky;
+  top:1px;
+}
+.card:hover{
+  box-shadow: 3px 5px 5px 2px #e9ecef;
+  transform:scale(1.1);
+}
+.cards{
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+/* .row-footer{
+  width: 50%;
+} */
+ .fixed-bottom{
+  z-index: 1;
+  left:75%;
+
+ }
+ .card-title{
+  font-size: 25px;
+  text-align: center;
+  font-weight: bold ;
+ }
+ .nav-bar{
+  position: sticky;
+  top:2px;
+ }
+ .numeric-input{
+  font-family:'Times New Roman', Times, serif;
+  width: 100px;
+  height: 20px;
+ }

@@ -50,6 +50,7 @@ export const PosProvider = ({ children }) => {
         },
       )
       setCategories(result.data.subTypes)
+      setSelectedCategory('All')
       setError('')
       setLoading(false)
     } catch (error) {

@@ -8,6 +8,8 @@ export const PosContext = createContext()
 export const PosProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [tenants, setTenants] = useState([])
+  const [selectedTenant, setSelectedTenant] = useState({})
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [categoryProducts, setCategoryProducts] = useState([])
@@ -15,10 +17,31 @@ export const PosProvider = ({ children }) => {
   const [discountRate, setDiscountRate] = useState(0)
   const [taxRate, setTaxRate] = useState(0)
 
+  const fetchTenants = async () => {
+    try {
+      setLoading(true)
+      const result = await axios.post(
+        `${import.meta.env.VITE_BVTV_API_URL}/get-all-tenants`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        },
+      )
+      setTenants(result.data.tenants)
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      console.log(`Getting tenants error ${error}`)
+    }
+  }
+
+  useEffect(() => {
+    fetchTenants()
+  }, [])
+
   const fetchCategories = async () => {
     try {
       setLoading(true)
-      const data = { tenantId: import.meta.env.VITE_TENANT_ID }
+      const data = { tenantId: selectedTenant._id }
       const result = await axios.post(
         `${import.meta.env.VITE_BVTV_API_URL}/get-allsubtypes`,
         data,
@@ -27,6 +50,7 @@ export const PosProvider = ({ children }) => {
         },
       )
       setCategories(result.data.subTypes)
+      setError('')
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -37,13 +61,13 @@ export const PosProvider = ({ children }) => {
 
   useEffect(() => {
     fetchCategories()
-  }, [])
+  }, [selectedTenant])
 
   const fetchCategoryProducts = async (selectedCategory) => {
     try {
       setLoading(true)
       const data = {
-        tenantId: import.meta.env.VITE_TENANT_ID,
+        tenantId: selectedTenant._id,
         subCategory: selectedCategory,
       }
       let result
@@ -75,7 +99,7 @@ export const PosProvider = ({ children }) => {
 
   useEffect(() => {
     fetchCategoryProducts(selectedCategory)
-  }, [selectedCategory])
+  }, [selectedCategory, selectedTenant])
 
   const addToCart = (item) => {
     setCart((prevCart) => {
@@ -131,7 +155,7 @@ export const PosProvider = ({ children }) => {
       const billNumber = `BILL-${Math.floor(100000 + Math.random() * 900000)}`
 
       const orderData = {
-        tenantId: import.meta.env.VITE_TENANT_ID,
+        tenantId: selectedTenant._id,
         billPosRef,
         billNumber,
         customerName: 'anonymous',
@@ -142,7 +166,6 @@ export const PosProvider = ({ children }) => {
         taxAmount: tax.toFixed(2),
         totalPayable: totalPayable.toFixed(2),
       }
-      console.log(orderData)
 
       const response = await axios.post(
         `${import.meta.env.VITE_BVTV_API_URL}/process-bill`,
@@ -172,11 +195,16 @@ export const PosProvider = ({ children }) => {
   return (
     <PosContext.Provider
       value={{
+        tenants,
+        setTenants,
+        selectedTenant,
+        setSelectedTenant,
         categories,
         selectedCategory,
         setSelectedCategory,
         categoryProducts,
         cart,
+        setCart,
         addToCart,
         removeFromCart,
         updateCartItem,

@@ -1,4 +1,4 @@
-import { Col, ListGroup } from 'react-bootstrap'
+import { Col, ListGroup, Form } from 'react-bootstrap'
 import { useContext } from 'react'
 import { 
   IoBeerSharp,       
@@ -15,9 +15,13 @@ const Category = () => {
   const {
     error,
     loading,
+    tenants,
+    selectedTenant,
+    setSelectedTenant,
     categories,
     selectedCategory,
     setSelectedCategory,
+    setCart
   } = useContext(PosContext)
 
   const categoryIcons = {
@@ -40,6 +44,13 @@ const Category = () => {
     setSelectedCategory(category)
   }
 
+  const handleTenantChange = (event) => {
+    const selectedTenantId = event.target.value
+    const tenant = tenants.find(t => t._id === selectedTenantId)
+    setSelectedTenant(tenant)
+    setCart([])
+  }
+
   return (
     <Col
       style={{
@@ -56,6 +67,28 @@ const Category = () => {
         className="sidebar"
         style={{ padding: '20px', borderRight: '1px solid #2c2f36' }}
       >
+        {/* Dropdown for tenant selection */}
+        <Form.Select
+          aria-label="Select Tenant"
+          value={selectedTenant?._id || ''}
+          onChange={handleTenantChange}
+          style={{
+            marginBottom: '20px',
+            backgroundColor: '#2c2f36',
+            color: '#ffffff',
+            borderColor: '#2c2f36',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+          }}
+        >
+          <option value="">Select Tenant</option>
+          {tenants && tenants.map((tenant) => (
+            <option key={tenant._id} value={tenant._id}>
+              {tenant.tenantName}
+            </option>
+          ))}
+        </Form.Select>
+
+        {/* ListGroup for categories */}
         <ListGroup>
           <ListGroup.Item
             id="all001"

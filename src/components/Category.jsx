@@ -8,6 +8,9 @@ import {
   IoIceCreamSharp,         
   IoRestaurantSharp, 
   IoLeafSharp,        
+  IoPerson,
+  IoBasketballSharp,
+  IoEarthSharp  
 } from 'react-icons/io5';
 import { PosContext } from '../context/poscontext.jsx'
 
@@ -32,10 +35,10 @@ const Category = () => {
     'Comfort Food': IoWineSharp, 
     'Desserts': IoIceCreamSharp,
     'Drinks': IoBeerSharp, 
-    'Entrees': IoRestaurantSharp,
+    'Entrees': IoBasketballSharp ,
     'Fresh Food Bar': IoRestaurantSharp,
-    'Kid\'s Menu': IoRestaurantSharp,
-    'Misc.': IoRestaurantSharp, 
+    'Kid\'s Menu': IoPerson ,
+    'Misc.': IoEarthSharp , 
     'Salads': IoLeafSharp,
     'Sides': IoRestaurantSharp,
   };
